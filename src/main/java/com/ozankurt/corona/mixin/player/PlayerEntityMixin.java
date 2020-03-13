@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityMixinInterface {
 
     @Shadow public abstract Text getName();
 
@@ -46,30 +46,35 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return;
         }
 
-        if (! coughManager.isCoughing()) {
+        if (! coughManager.isCoughing) {
             return;
         }
 
         BlockPos currentBlocPos = getBlockPos();
 
         if (coughManager.hasChangedPosition(currentBlocPos)) {
-            coughManager.resetCough();
+            coughManager.reset();
+
+            sendMessage(new LiteralText("You must NOT move while coughing."));
 
             return;
         }
 
         MinecraftServer server = getServer();
 
+        List<ServerPlayerEntity> playerList = server.getPlayerManager().getPlayerList();
+
+        if (playerList.size() == 1) {
+            coughManager.reset();
+
+            sendMessage(new LiteralText("There are no other players to spread Corona."));
+
+            return;
+        }
+
         int currentTicks = server.getTicks();
 
         if (coughManager.shouldSpread(currentBlocPos, currentTicks)) {
-            List<ServerPlayerEntity> playerList = server.getPlayerManager().getPlayerList();
-
-            if (playerList.size() == 1) {
-                sendMessage(new LiteralText("There are no other players to spread Corona."));
-
-                return;
-            }
 
             for (int i = 0; i < playerList.size(); i++) {
                 ServerPlayerEntity serverPlayerEntity = playerList.get(i);
@@ -109,6 +114,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     }
                 }
             }
+
+            coughManager.reset();
         }
 
         return;
@@ -116,28 +123,24 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
     private void fromTag(CompoundTag tag, CallbackInfo ci) {
-//        if (! tag.contains("hasCorona")) {
-//            tag.putBoolean("hasCorona", false);
-//
-//            return;
-//        }
-//
-//        CompoundTag hasCorona = (CompoundTag) tag.get("hasCorona");
-//
-//        this.hasCorona = hasCorona.getBoolean("hasCorona");
+        if (! tag.contains("hasCorona")) {
+            tag.putBoolean("hasCorona", false);
+
+            return;
+        }
+
+        this.hasCorona = tag.getBoolean("hasCorona");
     }
 
     @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToTag(Lnet/minecraft/nbt/CompoundTag;)V")
     private void toTag(CompoundTag tag, CallbackInfo ci) {
         tag.putBoolean("hasCorona", true);
     }
-
     public boolean hasCorona() {
         return hasCorona;
     }
 
     public void setHasCorona(boolean hasCorona) {
-        writeCustomDataToTag(new CompoundTag());
         this.hasCorona = hasCorona;
     }
 

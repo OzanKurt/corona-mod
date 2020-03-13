@@ -2,6 +2,9 @@ package com.ozankurt.corona.mixin.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.ozankurt.corona.Corona;
+import com.ozankurt.corona.commands.CoughCommand;
+import com.ozankurt.corona.commands.CureCommand;
+import com.ozankurt.corona.commands.InfectCommand;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import org.spongepowered.asm.mixin.Final;
@@ -18,6 +21,8 @@ public abstract class CommandManagerMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onRegister(boolean boolean_1, CallbackInfo ci) {
-        Corona.getInstance().setCommandDispatcher(this.dispatcher);
+        CoughCommand.register(this.dispatcher);
+        InfectCommand.register(this.dispatcher);
+        CureCommand.register(this.dispatcher);
     }
 }

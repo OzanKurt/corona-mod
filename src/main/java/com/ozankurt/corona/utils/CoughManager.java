@@ -4,12 +4,16 @@ import net.minecraft.util.math.BlockPos;
 
 public class CoughManager {
 
-    public BlockPos blockPos;
-    public int ticks;
+    public boolean isCoughing = false;
+
+    public BlockPos blockPos = null;
+    public int ticks = 0;
 
     private static final int TICKS_TO_SPREAD = 60;
 
     public void start(BlockPos blockPos, int ticks) {
+        this.isCoughing = true;
+
         this.blockPos = blockPos;
         this.ticks = ticks;
     }
@@ -23,18 +27,12 @@ public class CoughManager {
     }
 
     public boolean hasChangedPosition(BlockPos blockPos) {
-        if (this.blockPos == blockPos) {
-            return true;
-        }
-
-        return false;
+        return ! this.blockPos.equals(blockPos);
     }
 
-    public boolean isCoughing() {
-        return blockPos == null;
-    }
+    public void reset() {
+        this.isCoughing = false;
 
-    public void resetCough() {
         this.blockPos = null;
         this.ticks = 0;
     }

@@ -35,6 +35,9 @@ public class CoughCommand {
 
         if (playerEntityMixin.hasCorona()) {
             playerEntityMixin.startCoughing(server.getTicks());
+            serverPlayerEntity.sendMessage(
+                new LiteralText("You started coughing, don't move for 3 seconds to infect nearby players.")
+            );
         } else {
             serverPlayerEntity.sendMessage(
                 new LiteralText("You don't have corona, you can't cough.")
