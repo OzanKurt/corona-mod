@@ -4,4 +4,6 @@ public interface PlayerEntityMixinInterface {
     void startCoughing(int ticks);
 
     void setHasCorona(boolean b);
+
+    boolean hasCorona();
 }

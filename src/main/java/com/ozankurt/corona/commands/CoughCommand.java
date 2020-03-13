@@ -8,6 +8,7 @@ import com.ozankurt.corona.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -32,7 +33,13 @@ public class CoughCommand {
             return 1;
         }
 
-        playerEntityMixin.startCoughing(server.getTicks());
+        if (playerEntityMixin.hasCorona()) {
+            playerEntityMixin.startCoughing(server.getTicks());
+        } else {
+            serverPlayerEntity.sendMessage(
+                new LiteralText("You don't have corona, you can't cough.")
+            );
+        }
 
         return 1;
     }

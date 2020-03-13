@@ -42,11 +42,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "tick", at = @At("RETURN"))
     protected void onTick(CallbackInfo ci) {
-        if (!hasCorona) {
+        if (! hasCorona) {
             return;
         }
 
-        if (!coughManager.isCoughing()) {
+        if (! coughManager.isCoughing()) {
             return;
         }
 
@@ -99,7 +99,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                             new LiteralText("You have successfully spread Corona to " + serverPlayerEntity.getName().asString())
                         );
                     } else {
-
                         serverPlayerEntity.sendMessage(
                             new LiteralText(getName().asString() + "tried to spread Corona to you but failed. Be careful you might not have a second chance.")
                         );
@@ -120,6 +119,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void fromTag(CompoundTag tag, CallbackInfo ci) {
         if (! tag.contains("hasCorona")) {
             tag.putBoolean("hasCorona", false);
+
+            return;
         }
 
         CompoundTag hasCorona = (CompoundTag) tag.get("hasCorona");
