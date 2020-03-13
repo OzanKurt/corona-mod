@@ -114,18 +114,17 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return;
     }
 
-
     @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
     private void fromTag(CompoundTag tag, CallbackInfo ci) {
-        if (! tag.contains("hasCorona")) {
-            tag.putBoolean("hasCorona", false);
-
-            return;
-        }
-
-        CompoundTag hasCorona = (CompoundTag) tag.get("hasCorona");
-
-        this.hasCorona = hasCorona.getBoolean("hasCorona");
+//        if (! tag.contains("hasCorona")) {
+//            tag.putBoolean("hasCorona", false);
+//
+//            return;
+//        }
+//
+//        CompoundTag hasCorona = (CompoundTag) tag.get("hasCorona");
+//
+//        this.hasCorona = hasCorona.getBoolean("hasCorona");
     }
 
     @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToTag(Lnet/minecraft/nbt/CompoundTag;)V")

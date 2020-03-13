@@ -3,14 +3,14 @@
   "id": "corona",
   "version": "${version}",
 
-  "name": "Corona Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Corona",
+  "description": "Corona virus in Minecraft!",
   "authors": [
     "hello@ozankurt.com"
   ],
   "contact": {
     "homepage": "https://ozankurt.com/",
-    "sources": "https://github.com/OzanKurt/Corona"
+    "sources": "https://github.com/OzanKurt/corona-mod"
   },
 
   "license": "CC0-1.0",
